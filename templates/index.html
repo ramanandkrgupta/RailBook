@@ -2,774 +2,484 @@
 <html lang="en">
 
 <head>
-<meta charset="UTF-8">
-<title>Railway Reservation System</title>
-
-<style>
-
-body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:
-    linear-gradient(rgba(0,0,0,0.55),rgba(0,0,0,0.55)),
-    url("/static/train1.jpg");
-    background-size:cover;
-    background-position:center;
-    background-attachment:fixed;
-}
-
-header{
-    background:#003366;
-    color:white;
-    padding:14px 20px;
-}
-
-.header-top{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-}
-
-.header-left h1{
-    margin:0;
-    font-size:28px;
-}
-
-.header-info{
-    font-size:14px;
-}
-
-.header-actions{
-    display:flex;
-    gap:10px;
-    align-items:center;
-}
-
-.lang-select{
-    padding:10px;
-    font-size:16px;
-}
-
-.help-btn{
-    background:yellow;
-    color:black;
-    border:none;
-    padding:12px 18px;
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-.container{
-    background:rgba(255,255,255,0.95);
-    width:450px;
-    margin:40px auto;
-    padding:30px;
-    border-radius:14px;
-    text-align:center;
-}
-
-.hidden{
-    display:none;
-}
-
-input,select,textarea,button{
-    width:92%;
-    padding:12px;
-    margin:8px 0;
-    font-size:17px;
-}
-
-button{
-    background:#007bff;
-    color:white;
-    border:none;
-    cursor:pointer;
-}
-
-button:hover{
-    background:#0056b3;
-}
-
-.backBtn{
-    background:gray;
-}
-
-.cancelBtn{
-    background:red;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:10px;
-}
-
-th,td{
-    border:1px solid black;
-    padding:8px;
-}
-
-.link{
-    color:blue;
-    cursor:pointer;
-}
-
-#fareBox{
-    font-size:20px;
-    font-weight:bold;
-    margin-top:10px;
-    color:green;
-}
-
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RailBook — Train Ticket Booking | IRCTC Authorised Partner</title>
+  <meta name="description"
+    content="Book train tickets online instantly. Search trains, check PNR status, manage your bookings. IRCTC authorised partner — secure and fast.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
 </head>
 
 <body>
 
-<header>
-
-<div class="header-top">
-
-<div class="header-left">
-<h1 id="mainTitle">🚆 Railway Reservation System</h1>
-</div>
-
-<div class="header-info">
-<div id="time"></div>
-<div>
-Tatkal: AC - 10:00 AM | Non AC - 11:00 AM
-</div>
-<div>
-Helpline: 139
-</div>
-</div>
-
-<div class="header-actions">
-
-<select class="lang-select" onchange="changeLanguage(this.value)">
-<option value="en">English</option>
-<option value="hi">हिंदी</option>
-</select>
-
-<button class="help-btn" onclick="openHelp()">
-Help & Support
-</button>
-
-</div>
-
-</div>
-
-</header>
-
-<!-- LOGIN -->
-
-<div class="container" id="loginPage">
-
-<h2 id="loginTitle">Login</h2>
-
-<input type="text" id="loginUser" placeholder="Username">
-
-<input type="password" id="loginPass" placeholder="Password">
-
-<button onclick="login()" id="loginBtn">
-Login
-</button>
-
-<p class="link" onclick="showRegister()">
-New User? Register
-</p>
-
-</div>
-
-<!-- REGISTER -->
-
-<div class="container hidden" id="registerPage">
-
-<h2>Register</h2>
-
-<input type="text" id="regUser" placeholder="Username">
-
-<input type="password" id="regPass" placeholder="Password">
-
-<button onclick="registerUser()">
-Register
-</button>
-
-<button class="backBtn" onclick="showLogin()">
-Back
-</button>
-
-</div>
-
-<!-- DASHBOARD -->
-
-<div class="container hidden" id="dashboard">
-
-<h2>Dashboard</h2>
-
-<button onclick="showBooking()">
-Book Ticket
-</button>
-
-<button onclick="showTickets()">
-View Tickets
-</button>
-
-<button onclick="showPNR()">
-Check PNR Status
-</button>
-
-<button onclick="showComplaint()">
-Complaint Desk
-</button>
-
-<button onclick="logout()">
-Logout
-</button>
-
-</div>
-
-<!-- BOOKING -->
-
-<div class="container hidden" id="bookingPage">
-
-<h2>Book Ticket</h2>
-
-<input type="text" id="train" placeholder="Train Name">
-
-<input type="text" id="source" placeholder="Source">
-
-<input type="text" id="destination" placeholder="Destination">
-
-<select id="classType" onchange="calculateFare()">
-
-<option value="">Select Class</option>
-
-<option value="General">
-General - ₹100
-</option>
-
-<option value="Sleeper">
-Sleeper - ₹150
-</option>
-
-<option value="AC 3 Tier">
-AC 3 Tier - ₹200
-</option>
-
-<option value="AC 2 Tier">
-AC 2 Tier - ₹250
-</option>
-
-<option value="AC 1 Tier">
-AC 1 Tier - ₹300
-</option>
-
-</select>
-
-<input type="number"
-id="people"
-placeholder="Number of People"
-min="1"
-value="1"
-oninput="calculateFare()">
-
-<div id="fareBox">
-Total Fare: ₹0
-</div>
-
-<button onclick="bookTicket()">
-Book Ticket
-</button>
-
-<button class="backBtn" onclick="showDashboard()">
-Back
-</button>
-
-</div>
-
-<!-- TICKETS -->
-
-<div class="container hidden" id="ticketPage">
-
-<h2>My Tickets</h2>
-
-<table>
-
-<tr>
-<th>PNR</th>
-<th>Train</th>
-<th>Fare</th>
-<th>Status</th>
-<th>Action</th>
-</tr>
-
-<tbody id="ticketData"></tbody>
-
-</table>
-
-<button class="backBtn" onclick="showDashboard()">
-Back
-</button>
-
-</div>
-
-<!-- PNR -->
-
-<div class="container hidden" id="pnrPage">
-
-<h2>PNR Status</h2>
-
-<input type="text" id="pnrInput" placeholder="Enter PNR">
-
-<button onclick="checkPNR()">
-Check
-</button>
-
-<p id="pnrResult"></p>
-
-<button class="backBtn" onclick="showDashboard()">
-Back
-</button>
-
-</div>
-
-<!-- COMPLAINT -->
-
-<div class="container hidden" id="complaintPage">
-
-<h2>Complaint Desk</h2>
-
-<input type="text" id="issue" placeholder="Issue">
-
-<textarea id="description"
-placeholder="Describe your issue"></textarea>
-
-<button onclick="submitComplaint()">
-Submit
-</button>
-
-<p id="complaintMsg"></p>
-
-<button class="backBtn" onclick="showDashboard()">
-Back
-</button>
-
-</div>
-
-<!-- HELP -->
-
-<div class="container hidden" id="helpPage">
-
-<h2>Help & Support</h2>
-
-<textarea id="helpText"
-placeholder="Enter your query"></textarea>
-
-<button onclick="submitHelp()">
-Submit
-</button>
-
-<p id="helpMsg"></p>
-
-<button class="backBtn" onclick="goBack()">
-Back
-</button>
-
-</div>
-
-<script>
-
-let currentUser=""
-let previousPage="loginPage"
-
-function el(id){
-    return document.getElementById(id)
-}
-
-function hideAll(){
-    document.querySelectorAll(".container").forEach(c=>{
-        c.classList.add("hidden")
-    })
-}
-
-function showPage(id){
-    hideAll()
-    el(id).classList.remove("hidden")
-}
-
-function showLogin(){
-    showPage("loginPage")
-}
-
-function showRegister(){
-    showPage("registerPage")
-}
-
-function showDashboard(){
-    showPage("dashboard")
-}
-
-function showBooking(){
-    showPage("bookingPage")
-}
-
-function showTickets(){
-    showPage("ticketPage")
-    loadTickets()
-}
-
-function showPNR(){
-    showPage("pnrPage")
-}
-
-function showComplaint(){
-    showPage("complaintPage")
-}
-
-function openHelp(){
-
-    if(!el("dashboard").classList.contains("hidden")){
-        previousPage="dashboard"
-    }
-
-    else if(!el("bookingPage").classList.contains("hidden")){
-        previousPage="bookingPage"
-    }
-
-    else if(!el("ticketPage").classList.contains("hidden")){
-        previousPage="ticketPage"
-    }
-
-    else{
-        previousPage="loginPage"
-    }
-
-    showPage("helpPage")
-}
-
-function goBack(){
-    showPage(previousPage)
-}
-
-/* REGISTER */
-
-async function registerUser(){
-
-    let res=await fetch("/register",{
-
-        method:"POST",
-
-        headers:{
-            "Content-Type":"application/json"
-        },
-
-        body:JSON.stringify({
-            username:el("regUser").value,
-            password:el("regPass").value
-        })
-
-    })
-
-    let data=await res.json()
-
-    alert(data.message)
-
-    if(data.success){
-        showLogin()
-    }
-}
-
-/* LOGIN */
-
-async function login(){
-
-    let res=await fetch("/login",{
-
-        method:"POST",
-
-        headers:{
-            "Content-Type":"application/json"
-        },
-
-        body:JSON.stringify({
-            username:el("loginUser").value,
-            password:el("loginPass").value
-        })
-
-    })
-
-    let data=await res.json()
-
-    if(data.success){
-
-        currentUser=el("loginUser").value
-
-        showDashboard()
-
-    }else{
-
-        alert(data.message)
-    }
-}
-
-/* FARE */
-
-function calculateFare(){
-
-    let type=el("classType").value
-
-    let people=parseInt(el("people").value) || 1
-
-    let fare=0
-
-    if(type==="General"){
-        fare=100
-    }
-
-    else if(type==="Sleeper"){
-        fare=150
-    }
-
-    else if(type==="AC 3 Tier"){
-        fare=200
-    }
-
-    else if(type==="AC 2 Tier"){
-        fare=250
-    }
-
-    else if(type==="AC 1 Tier"){
-        fare=300
-    }
-
-    let total=fare*people
-
-    el("fareBox").innerHTML=
-    "Total Fare: ₹"+total
-
-    return total
-}
-
-/* BOOK */
-
-async function bookTicket(){
-
-    let totalFare=calculateFare()
-
-    let res=await fetch("/book",{
-
-        method:"POST",
-
-        headers:{
-            "Content-Type":"application/json"
-        },
-
-        body:JSON.stringify({
-
-            username:currentUser,
-
-            train:el("train").value,
-
-            source:el("source").value,
-
-            destination:el("destination").value,
-
-            classType:el("classType").value,
-
-            people:el("people").value,
-
-            fare:totalFare
-
-        })
-
-    })
-
-    let data=await res.json()
-
-    alert(
-        "Ticket Booked Successfully\n\nPNR: "
-        +data.pnr+
-        "\nFare: ₹"+
-        totalFare
-    )
-
-    showDashboard()
-}
-
-/* VIEW TICKETS */
-
-async function loadTickets(){
-
-    let res=await fetch("/tickets/"+currentUser)
-
-    let data=await res.json()
-
-    let html=""
-
-    data.forEach(t=>{
-
-        html += `
-
-        <tr>
-
-        <td>${t.pnr}</td>
-
-        <td>${t.train}</td>
-
-        <td>₹${t.fare || 0}</td>
-
-        <td>${t.status}</td>
-
-        <td>
-
-        <button class="cancelBtn"
-        onclick="cancelTicket('${t.pnr}')">
-
-        Cancel
-
+  <!-- TOAST CONTAINER -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <div class="nav-brand" onclick="showHome()" id="brandLogo">
+        <span class="brand-icon">🚆</span>
+        <span class="brand-name">RailBook</span>
+        <span class="brand-badge">IRCTC Partner</span>
+      </div>
+
+      <div class="nav-links">
+        <a class="nav-link active" id="navHome" onclick="showHome()">🏠 Home</a>
+        <a class="nav-link" id="navTickets" onclick="showMyTickets()">🎫 My Bookings</a>
+        <a class="nav-link" id="navPNR" onclick="showPNRPage()">🔍 PNR Status</a>
+        <a class="nav-link" id="navSupport" onclick="showSupportPage()">💬 Help</a>
+      </div>
+
+      <div class="nav-auth">
+        <div id="navAuthBtns">
+          <button class="btn-nav-login" id="btnLogin" onclick="openLoginModal()">Login</button>
+          <button class="btn-nav-register" id="btnRegister" onclick="openRegisterModal()">Register</button>
+        </div>
+        <div class="user-menu hidden" id="userMenu">
+          <span class="user-greet" id="userGreet">Hi, User</span>
+          <button class="btn-logout" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- ======================================================
+     HOME PAGE
+====================================================== -->
+  <div id="homePage" class="page">
+
+    <!-- HERO SECTION -->
+    <div class="hero">
+      <div class="hero-inner">
+        <div class="hero-text">
+          <h1>Train Ticket<br>Booking</h1>
+          <div class="hero-badge">
+            <span>🛡️</span>
+            <span>IRCTC Authorised Partner</span>
+          </div>
+          <div class="promo-pill">
+            🏷️ Use code <strong>RAIL60</strong> for extra savings!
+          </div>
+        </div>
+        <div class="hero-train">
+          <img src="/static/train.png" alt="Indian Train" id="heroTrainImg" onerror="this.style.display='none'">
+        </div>
+      </div>
+    </div>
+
+    <!-- SEARCH CARD -->
+    <div class="search-card-wrap">
+      <div class="search-card">
+        <div class="search-fields">
+
+          <!-- FROM -->
+          <div class="search-field" id="sfFrom">
+            <span class="sf-icon">🚉</span>
+            <div class="sf-body">
+              <label>From</label>
+              <div class="station-picker">
+                <input type="text" id="searchFrom" placeholder="City or Station" autocomplete="off"
+                  onfocus="openStationDropdown('from')" oninput="filterStations('from')"
+                  onkeydown="stationKeyNav(event,'from')">
+                <div class="station-dropdown" id="fromDropdown"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SWAP -->
+          <button class="swap-btn" onclick="swapStations()" title="Swap stations">⇄</button>
+
+          <!-- TO -->
+          <div class="search-field" id="sfTo">
+            <span class="sf-icon">🏁</span>
+            <div class="sf-body">
+              <label>To</label>
+              <div class="station-picker">
+                <input type="text" id="searchTo" placeholder="City or Station" autocomplete="off"
+                  onfocus="openStationDropdown('to')" oninput="filterStations('to')"
+                  onkeydown="stationKeyNav(event,'to')">
+                <div class="station-dropdown" id="toDropdown"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DATE -->
+          <div class="search-field">
+            <span class="sf-icon">📅</span>
+            <div class="sf-body">
+              <label for="searchDate">Date of Journey</label>
+              <input type="date" id="searchDate">
+              <div class="quick-dates">
+                <button class="quick-btn" onclick="setQuickDate(1)">Tomorrow</button>
+                <button class="quick-btn" onclick="setQuickDate(2)">Day After</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- CLASS -->
+          <div class="search-field">
+            <span class="sf-icon">💺</span>
+            <div class="sf-body">
+              <label for="searchClass">Class</label>
+              <select id="searchClass">
+                <option value="all">All Classes</option>
+                <option value="SL">Sleeper (SL)</option>
+                <option value="3A">AC 3 Tier (3A)</option>
+                <option value="2A">AC 2 Tier (2A)</option>
+                <option value="1A">AC 1 Tier (1A)</option>
+                <option value="CC">Chair Car (CC)</option>
+                <option value="EC">Executive Chair (EC)</option>
+              </select>
+            </div>
+          </div>
+
+        </div><!-- end search-fields -->
+
+        <button class="btn-search-trains" id="btnSearchTrains" onclick="searchTrains()">
+          🔍 Search Trains
         </button>
 
-        </td>
 
-        </tr>
-        `
-    })
+      </div>
+    </div>
 
-    el("ticketData").innerHTML=html
-}
+    <!-- OFFERS SECTION -->
+    <section class="offers-section">
+      <h2 class="section-title">Offers for You</h2>
+      <div class="offers-scroll">
+        <div class="offer-card" style="--clr:#fff3e0">
+          <span class="offer-tag">Additional offers</span>
+          <p>Get ₹120 off on train tickets</p>
+          <small>Valid till 31 May</small>
+          <div class="offer-code">🏷 SUMMERNEW</div>
+        </div>
+        <div class="offer-card" style="--clr:#e8f5e9">
+          <span class="offer-tag">Additional offers</span>
+          <p>Get upto ₹150 off on train tickets</p>
+          <small>Valid till 19 Jul</small>
+          <div class="offer-code">🏷 RATHYATRA</div>
+        </div>
+        <div class="offer-card" style="--clr:#fce4ec">
+          <span class="offer-tag">Limited offer</span>
+          <p>Get 50% off upto ₹300 on Alternate Trip</p>
+          <small>Valid till 31 May</small>
+          <div class="offer-code">🏷 HALFPRICE</div>
+        </div>
+        <div class="offer-card" style="--clr:#e3f2fd">
+          <span class="offer-tag">Additional offers</span>
+          <p>Get ₹150 off on train tickets</p>
+          <small>Valid till 30 Jun</small>
+          <div class="offer-code">🏷 CHARDHAM</div>
+        </div>
+        <div class="offer-card" style="--clr:#f3e5f5">
+          <span class="offer-tag">Festival offer</span>
+          <p>Flat ₹200 off on Rajdhani tickets</p>
+          <small>Valid till 15 Jun</small>
+          <div class="offer-code">🏷 RAJDHANI200</div>
+        </div>
+        <div class="offer-card" style="--clr:#e0f7fa">
+          <span class="offer-tag">New user offer</span>
+          <p>₹100 off on your first booking</p>
+          <small>For new users only</small>
+          <div class="offer-code">🏷 FIRST100</div>
+        </div>
+      </div>
+    </section>
 
-/* CANCEL */
+    <!-- FEATURES / WHY US -->
+    <section class="features-section">
+      <div class="features-inner">
+        <div class="feature-card">
+          <div class="feature-icon">✅</div>
+          <h3>Free Cancellation</h3>
+          <p>Cancel anytime before departure with easy refunds</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Instant Confirmation</h3>
+          <p>Get your PNR within seconds of booking</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>Secure Payments</h3>
+          <p>100% safe &amp; encrypted transactions</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎧</div>
+          <h3>24/7 Support</h3>
+          <p>Helpline: 139 — Always available for you</p>
+        </div>
+      </div>
+    </section>
 
-async function cancelTicket(pnr){
+  </div><!-- end homePage -->
 
-    await fetch("/cancel/"+pnr,{
-        method:"POST"
-    })
 
-    alert("Ticket Cancelled")
+  <!-- ======================================================
+     SEARCH RESULTS PAGE
+====================================================== -->
+  <div id="searchPage" class="page hidden">
+    <div class="page-container">
 
-    loadTickets()
-}
+      <div class="results-header">
+        <div class="route-summary">
+          <span id="resultFrom">—</span>
+          <span class="route-arrow">→</span>
+          <span id="resultTo">—</span>
+          <span class="route-date" id="resultDate"></span>
+        </div>
+        <button class="btn-modify" onclick="showHome()">✏️ Modify Search</button>
+      </div>
 
-/* PNR */
+      <div id="trainResults" class="train-list"></div>
 
-async function checkPNR(){
+    </div>
+  </div>
 
-    let pnr=el("pnrInput").value
 
-    let res=await fetch("/pnr/"+pnr)
+  <!-- ======================================================
+     BOOKING PAGE
+====================================================== -->
+  <div id="bookingPage" class="page hidden">
+    <div class="page-container">
+      <h2 class="page-title">Complete Your Booking</h2>
 
-    let data=await res.json()
+      <div class="booking-layout">
 
-    if(data.message){
+        <!-- LEFT: Form -->
+        <div class="booking-form-wrap">
 
-        el("pnrResult").innerHTML=data.message
+          <!-- Train Info Banner -->
+          <div class="booking-train-banner" id="bookingTrainBanner"></div>
 
-    }else{
+          <!-- Passenger Details -->
+          <div class="form-section">
+            <h3>👤 Passenger Details</h3>
 
-        el("pnrResult").innerHTML=`
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="passengerName" placeholder="As on govt ID">
+            </div>
 
-        Train: ${data.train}<br>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Age</label>
+                <input type="number" id="passengerAge" placeholder="Age" min="1" max="120">
+              </div>
+              <div class="form-group">
+                <label>Gender</label>
+                <select id="passengerGender">
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+          </div>
 
-        From: ${data.source}<br>
+          <!-- Journey Details -->
+          <div class="form-section">
+            <h3>🚉 Journey Details</h3>
 
-        To: ${data.destination}<br>
+            <div class="form-group">
+              <label>Travel Class</label>
+              <div class="class-selector" id="classSelector"></div>
+            </div>
 
-        Class: ${data.classType}<br>
+            <div class="form-group">
+              <label>Number of Passengers</label>
+              <div class="count-control">
+                <button class="count-btn" onclick="changeCount(-1)">−</button>
+                <span class="count-num" id="passengerCount">1</span>
+                <button class="count-btn" onclick="changeCount(1)">+</button>
+              </div>
+            </div>
 
-        People: ${data.people || 1}<br>
+            <div class="form-group">
+              <label>Date of Journey</label>
+              <input type="date" id="bookingDate" readonly>
+            </div>
+          </div>
 
-        Fare: ₹${data.fare || 0}<br>
+          <button class="btn-book-confirm" onclick="confirmBooking()">
+            🎫 Confirm &amp; Book
+          </button>
+          <button class="btn-back-link" onclick="showSearchPage()">← Back to Results</button>
 
-        Status: ${data.status}
+        </div><!-- end booking-form-wrap -->
 
-        `
-    }
-}
+        <!-- RIGHT: Fare Summary -->
+        <div class="fare-summary">
+          <h3>💰 Fare Summary</h3>
+          <div class="fare-row">
+            <span>Base Fare</span>
+            <span id="fareSummaryBase">₹0</span>
+          </div>
+          <div class="fare-row">
+            <span>Passengers</span>
+            <span id="fareSummaryPax">× 1</span>
+          </div>
+          <div class="fare-row">
+            <span>Reservation Charge</span>
+            <span>₹40</span>
+          </div>
+          <div class="fare-row total">
+            <span>Total</span>
+            <span id="fareSummaryTotal">₹40</span>
+          </div>
+          <div class="fare-note">
+            ✅ Free cancellation up to 48 hrs before departure
+          </div>
+        </div>
 
-/* COMPLAINT */
+      </div><!-- end booking-layout -->
+    </div>
+  </div>
 
-async function submitComplaint(){
 
-    let res=await fetch("/support",{
+  <!-- ======================================================
+     MY TICKETS PAGE
+====================================================== -->
+  <div id="myTicketsPage" class="page hidden">
+    <div class="page-container">
+      <h2 class="page-title">🎫 My Bookings</h2>
+      <div id="ticketsList" class="tickets-list"></div>
+    </div>
+  </div>
 
-        method:"POST",
 
-        headers:{
-            "Content-Type":"application/json"
-        },
+  <!-- ======================================================
+     PNR STATUS PAGE
+====================================================== -->
+  <div id="pnrPage" class="page hidden">
+    <div class="page-container narrow">
+      <h2 class="page-title">🔍 PNR Status</h2>
+      <div class="pnr-card">
+        <div class="form-group">
+          <label>Enter PNR Number</label>
+          <input type="text" id="pnrInput" placeholder="e.g. PNR123456" maxlength="12">
+        </div>
+        <button class="btn-primary" onclick="checkPNR()">🔍 Check Status</button>
+        <div id="pnrResult" class="pnr-result hidden"></div>
+      </div>
+    </div>
+  </div>
 
-        body:JSON.stringify({
 
-            username:currentUser,
+  <!-- ======================================================
+     SUPPORT PAGE
+====================================================== -->
+  <div id="supportPage" class="page hidden">
+    <div class="page-container narrow">
+      <h2 class="page-title">💬 Help &amp; Support</h2>
+      <div class="support-card">
+        <div class="form-group">
+          <label>Issue Type</label>
+          <select id="issueType">
+            <option>Booking Issue</option>
+            <option>Cancellation Issue</option>
+            <option>Refund Issue</option>
+            <option>PNR Not Found</option>
+            <option>Technical Issue</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Describe Your Issue</label>
+          <textarea id="issueDesc" rows="5" placeholder="Tell us what happened and we'll help you..."></textarea>
+        </div>
+        <button class="btn-primary" onclick="submitSupport()">📨 Submit Request</button>
 
-            message:
-            el("issue").value+
-            " - "+
-            el("description").value
+        <div class="helpline-box">
+          <span class="helpline-icon">📞</span>
+          <div>
+            <strong>Railway Helpline</strong>
+            <p>Call 139 — Available 24 hours, 7 days a week</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        })
 
-    })
+  <!-- ======================================================
+     MODALS
+====================================================== -->
 
-    let data=await res.json()
+  <!-- LOGIN MODAL -->
+  <div id="loginModal" class="modal-overlay hidden" onclick="closeModalOnOverlay(event,'loginModal')">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
+      <div class="modal-logo">🚆 RailBook</div>
+      <h2>Welcome Back!</h2>
+      <p class="modal-sub">Login to book tickets and manage your trips</p>
 
-    el("complaintMsg").innerHTML=data.message
-}
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="loginUser" placeholder="Enter your username">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="loginPass" placeholder="Enter your password">
+      </div>
 
-/* HELP */
+      <button class="btn-primary" onclick="login()">🔓 Login</button>
+      <p class="modal-switch">New user? <a onclick="switchToRegister()">Create Account →</a></p>
+    </div>
+  </div>
 
-function submitHelp(){
+  <!-- REGISTER MODAL -->
+  <div id="registerModal" class="modal-overlay hidden" onclick="closeModalOnOverlay(event,'registerModal')">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal('registerModal')">✕</button>
+      <div class="modal-logo">🚆 RailBook</div>
+      <h2>Create Account</h2>
+      <p class="modal-sub">Join millions of happy travellers</p>
 
-    el("helpMsg").innerHTML=
-    "Query Submitted Successfully"
-}
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="regUser" placeholder="Choose a username">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="regPass" placeholder="Create a strong password">
+      </div>
 
-/* TIME */
+      <button class="btn-primary" onclick="registerUser()">🚀 Create Account</button>
+      <p class="modal-switch">Already have an account? <a onclick="switchToLogin()">Login →</a></p>
+    </div>
+  </div>
 
-setInterval(()=>{
+  <!-- BOOKING CONFIRMATION MODAL -->
+  <div id="confirmModal" class="modal-overlay hidden">
+    <div class="modal-box confirm-box">
+      <div class="confirm-anim">🎉</div>
+      <h2>Booking Confirmed!</h2>
+      <p>Your ticket has been successfully booked</p>
 
-    el("time").innerHTML=
-    "Current Time: "+
-    new Date().toLocaleString()
+      <div class="confirm-pnr-box">
+        <label>Your PNR Number</label>
+        <div class="pnr-val" id="confirmPNRVal">—</div>
+      </div>
 
-},1000)
+      <div class="confirm-details" id="confirmDetails"></div>
 
-/* LANGUAGE */
+      <button class="btn-primary" onclick="closeModal('confirmModal'); showMyTickets()">
+        📋 View My Bookings
+      </button>
+      <button class="btn-secondary" onclick="closeModal('confirmModal'); showHome()">
+        🏠 Back to Home
+      </button>
+    </div>
+  </div>
 
-function changeLanguage(lang){
-
-    if(lang==="es"){
-
-        el("mainTitle").innerHTML=
-        "🚆 Sistema Ferroviario"
-
-        el("loginTitle").innerHTML=
-        "Iniciar Sesión"
-
-        el("loginBtn").innerHTML=
-        "Entrar"
-    }
-
-    else{
-
-        location.reload()
-    }
-}
-
-/* LOGOUT */
-
-function logout(){
-
-    currentUser=""
-
-    showLogin()
-}
-
-</script>
-
+  <script src="/static/script.js"></script>
 </body>
+
 </html>
