@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Extra Railway Features</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<header>
+  <div class="header-top">
+
+    <h2>🚆 IRCTC Extra Features</h2>
+
+    <div class="header-actions">
+
+      <button class="helpBtn" onclick="showSupport()">
+        Help & Support
+      </button>
+
+    </div>
+
+  </div>
+</header>
+
+<!-- MAIN -->
+<div class="container" id="mainMenu">
+
+  <h3>Extra Features</h3>
+
+  <button onclick="showPNR()">
+    Check PNR Status
+  </button>
+
+  <button onclick="showCancel()">
+    Cancel Ticket
+  </button>
+
+  <button onclick="goMainPage()">
+    Back To Main Website
+  </button>
+
+</div>
+
+<!-- PNR -->
+<div class="container hidden" id="pnrPage">
+
+  <h3>PNR Status</h3>
+
+  <input id="pnrInput" placeholder="Enter PNR">
+
+  <button onclick="checkPNR()">
+    Check
+  </button>
+
+  <p id="pnrResult"></p>
+
+  <button onclick="backMainMenu()">
+    Back
+  </button>
+
+</div>
+
+<!-- CANCEL -->
+<div class="container hidden" id="cancelPage">
+
+  <h3>Cancel Ticket</h3>
+
+  <input id="cancelPNR" placeholder="Enter PNR">
+
+  <button onclick="cancelTicket()">
+    Cancel Ticket
+  </button>
+
+  <button onclick="backMainMenu()">
+    Back
+  </button>
+
+</div>
+
+<!-- SUPPORT -->
+<div class="container hidden" id="supportPage">
+
+  <h3>Help & Support</h3>
+
+  <textarea id="complaintText"></textarea>
+
+  <button onclick="submitComplaint()">
+    Submit
+  </button>
+
+  <button onclick="backPrevious()">
+    Back
+  </button>
+
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>

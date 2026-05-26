@@ -1,0 +1,79 @@
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    text-align:center;
+
+    background:
+    linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
+    url("train1.jpg");
+
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+}
+
+header{
+    background:#003366;
+    color:white;
+    padding:15px;
+}
+
+.header-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.header-actions{
+    display:flex;
+    gap:10px;
+}
+
+.helpBtn{
+    background:yellow;
+    color:black;
+    font-weight:bold;
+}
+
+.container{
+    width:420px;
+    margin:50px auto;
+    background:rgba(255,255,255,0.95);
+    padding:25px;
+    border-radius:10px;
+}
+
+input,select,textarea,button{
+    width:90%;
+    padding:10px;
+    margin:8px 0;
+}
+
+button{
+    background:#007bff;
+    color:white;
+    border:none;
+}
+
+button:hover{
+    background:#0056b3;
+}
+
+.hidden{
+    display:none;
+}
+
+.linkText{
+    color:blue;
+    cursor:pointer;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    border:1px solid black;
+    padding:8px;
+}

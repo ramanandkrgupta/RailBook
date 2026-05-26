@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<title>Railway Reservation System</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:
+    linear-gradient(rgba(0,0,0,0.55),rgba(0,0,0,0.55)),
+    url("/static/train1.jpg");
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+}
+
+header{
+    background:#003366;
+    color:white;
+    padding:14px 20px;
+}
+
+.header-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+}
+
+.header-left h1{
+    margin:0;
+    font-size:28px;
+}
+
+.header-info{
+    font-size:14px;
+}
+
+.header-actions{
+    display:flex;
+    gap:10px;
+    align-items:center;
+}
+
+.lang-select{
+    padding:10px;
+    font-size:16px;
+}
+
+.help-btn{
+    background:yellow;
+    color:black;
+    border:none;
+    padding:12px 18px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.container{
+    background:rgba(255,255,255,0.95);
+    width:450px;
+    margin:40px auto;
+    padding:30px;
+    border-radius:14px;
+    text-align:center;
+}
+
+.hidden{
+    display:none;
+}
+
+input,select,textarea,button{
+    width:92%;
+    padding:12px;
+    margin:8px 0;
+    font-size:17px;
+}
+
+button{
+    background:#007bff;
+    color:white;
+    border:none;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#0056b3;
+}
+
+.backBtn{
+    background:gray;
+}
+
+.cancelBtn{
+    background:red;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+}
+
+th,td{
+    border:1px solid black;
+    padding:8px;
+}
+
+.link{
+    color:blue;
+    cursor:pointer;
+}
+
+#fareBox{
+    font-size:20px;
+    font-weight:bold;
+    margin-top:10px;
+    color:green;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="header-top">
+
+<div class="header-left">
+<h1 id="mainTitle">🚆 Railway Reservation System</h1>
+</div>
+
+<div class="header-info">
+<div id="time"></div>
+<div>
+Tatkal: AC - 10:00 AM | Non AC - 11:00 AM
+</div>
+<div>
+Helpline: 139
+</div>
+</div>
+
+<div class="header-actions">
+
+<select class="lang-select" onchange="changeLanguage(this.value)">
+<option value="en">English</option>
+<option value="hi">हिंदी</option>
+</select>
+
+<button class="help-btn" onclick="openHelp()">
+Help & Support
+</button>
+
+</div>
+
+</div>
+
+</header>
+
+<!-- LOGIN -->
+
+<div class="container" id="loginPage">
+
+<h2 id="loginTitle">Login</h2>
+
+<input type="text" id="loginUser" placeholder="Username">
+
+<input type="password" id="loginPass" placeholder="Password">
+
+<button onclick="login()" id="loginBtn">
+Login
+</button>
+
+<p class="link" onclick="showRegister()">
+New User? Register
+</p>
+
+</div>
+
+<!-- REGISTER -->
+
+<div class="container hidden" id="registerPage">
+
+<h2>Register</h2>
+
+<input type="text" id="regUser" placeholder="Username">
+
+<input type="password" id="regPass" placeholder="Password">
+
+<button onclick="registerUser()">
+Register
+</button>
+
+<button class="backBtn" onclick="showLogin()">
+Back
+</button>
+
+</div>
+
+<!-- DASHBOARD -->
+
+<div class="container hidden" id="dashboard">
+
+<h2>Dashboard</h2>
+
+<button onclick="showBooking()">
+Book Ticket
+</button>
+
+<button onclick="showTickets()">
+View Tickets
+</button>
+
+<button onclick="showPNR()">
+Check PNR Status
+</button>
+
+<button onclick="showComplaint()">
+Complaint Desk
+</button>
+
+<button onclick="logout()">
+Logout
+</button>
+
+</div>
+
+<!-- BOOKING -->
+
+<div class="container hidden" id="bookingPage">
+
+<h2>Book Ticket</h2>
+
+<input type="text" id="train" placeholder="Train Name">
+
+<input type="text" id="source" placeholder="Source">
+
+<input type="text" id="destination" placeholder="Destination">
+
+<select id="classType" onchange="calculateFare()">
+
+<option value="">Select Class</option>
+
+<option value="General">
+General - ₹100
+</option>
+
+<option value="Sleeper">
+Sleeper - ₹150
+</option>
+
+<option value="AC 3 Tier">
+AC 3 Tier - ₹200
+</option>
+
+<option value="AC 2 Tier">
+AC 2 Tier - ₹250
+</option>
+
+<option value="AC 1 Tier">
+AC 1 Tier - ₹300
+</option>
+
+</select>
+
+<input type="number"
+id="people"
+placeholder="Number of People"
+min="1"
+value="1"
+oninput="calculateFare()">
+
+<div id="fareBox">
+Total Fare: ₹0
+</div>
+
+<button onclick="bookTicket()">
+Book Ticket
+</button>
+
+<button class="backBtn" onclick="showDashboard()">
+Back
+</button>
+
+</div>
+
+<!-- TICKETS -->
+
+<div class="container hidden" id="ticketPage">
+
+<h2>My Tickets</h2>
+
+<table>
+
+<tr>
+<th>PNR</th>
+<th>Train</th>
+<th>Fare</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+<tbody id="ticketData"></tbody>
+
+</table>
+
+<button class="backBtn" onclick="showDashboard()">
+Back
+</button>
+
+</div>
+
+<!-- PNR -->
+
+<div class="container hidden" id="pnrPage">
+
+<h2>PNR Status</h2>
+
+<input type="text" id="pnrInput" placeholder="Enter PNR">
+
+<button onclick="checkPNR()">
+Check
+</button>
+
+<p id="pnrResult"></p>
+
+<button class="backBtn" onclick="showDashboard()">
+Back
+</button>
+
+</div>
+
+<!-- COMPLAINT -->
+
+<div class="container hidden" id="complaintPage">
+
+<h2>Complaint Desk</h2>
+
+<input type="text" id="issue" placeholder="Issue">
+
+<textarea id="description"
+placeholder="Describe your issue"></textarea>
+
+<button onclick="submitComplaint()">
+Submit
+</button>
+
+<p id="complaintMsg"></p>
+
+<button class="backBtn" onclick="showDashboard()">
+Back
+</button>
+
+</div>
+
+<!-- HELP -->
+
+<div class="container hidden" id="helpPage">
+
+<h2>Help & Support</h2>
+
+<textarea id="helpText"
+placeholder="Enter your query"></textarea>
+
+<button onclick="submitHelp()">
+Submit
+</button>
+
+<p id="helpMsg"></p>
+
+<button class="backBtn" onclick="goBack()">
+Back
+</button>
+
+</div>
+
+<script>
+
+let currentUser=""
+let previousPage="loginPage"
+
+function el(id){
+    return document.getElementById(id)
+}
+
+function hideAll(){
+    document.querySelectorAll(".container").forEach(c=>{
+        c.classList.add("hidden")
+    })
+}
+
+function showPage(id){
+    hideAll()
+    el(id).classList.remove("hidden")
+}
+
+function showLogin(){
+    showPage("loginPage")
+}
+
+function showRegister(){
+    showPage("registerPage")
+}
+
+function showDashboard(){
+    showPage("dashboard")
+}
+
+function showBooking(){
+    showPage("bookingPage")
+}
+
+function showTickets(){
+    showPage("ticketPage")
+    loadTickets()
+}
+
+function showPNR(){
+    showPage("pnrPage")
+}
+
+function showComplaint(){
+    showPage("complaintPage")
+}
+
+function openHelp(){
+
+    if(!el("dashboard").classList.contains("hidden")){
+        previousPage="dashboard"
+    }
+
+    else if(!el("bookingPage").classList.contains("hidden")){
+        previousPage="bookingPage"
+    }
+
+    else if(!el("ticketPage").classList.contains("hidden")){
+        previousPage="ticketPage"
+    }
+
+    else{
+        previousPage="loginPage"
+    }
+
+    showPage("helpPage")
+}
+
+function goBack(){
+    showPage(previousPage)
+}
+
+/* REGISTER */
+
+async function registerUser(){
+
+    let res=await fetch("/register",{
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+            username:el("regUser").value,
+            password:el("regPass").value
+        })
+
+    })
+
+    let data=await res.json()
+
+    alert(data.message)
+
+    if(data.success){
+        showLogin()
+    }
+}
+
+/* LOGIN */
+
+async function login(){
+
+    let res=await fetch("/login",{
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+            username:el("loginUser").value,
+            password:el("loginPass").value
+        })
+
+    })
+
+    let data=await res.json()
+
+    if(data.success){
+
+        currentUser=el("loginUser").value
+
+        showDashboard()
+
+    }else{
+
+        alert(data.message)
+    }
+}
+
+/* FARE */
+
+function calculateFare(){
+
+    let type=el("classType").value
+
+    let people=parseInt(el("people").value) || 1
+
+    let fare=0
+
+    if(type==="General"){
+        fare=100
+    }
+
+    else if(type==="Sleeper"){
+        fare=150
+    }
+
+    else if(type==="AC 3 Tier"){
+        fare=200
+    }
+
+    else if(type==="AC 2 Tier"){
+        fare=250
+    }
+
+    else if(type==="AC 1 Tier"){
+        fare=300
+    }
+
+    let total=fare*people
+
+    el("fareBox").innerHTML=
+    "Total Fare: ₹"+total
+
+    return total
+}
+
+/* BOOK */
+
+async function bookTicket(){
+
+    let totalFare=calculateFare()
+
+    let res=await fetch("/book",{
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+
+            username:currentUser,
+
+            train:el("train").value,
+
+            source:el("source").value,
+
+            destination:el("destination").value,
+
+            classType:el("classType").value,
+
+            people:el("people").value,
+
+            fare:totalFare
+
+        })
+
+    })
+
+    let data=await res.json()
+
+    alert(
+        "Ticket Booked Successfully\n\nPNR: "
+        +data.pnr+
+        "\nFare: ₹"+
+        totalFare
+    )
+
+    showDashboard()
+}
+
+/* VIEW TICKETS */
+
+async function loadTickets(){
+
+    let res=await fetch("/tickets/"+currentUser)
+
+    let data=await res.json()
+
+    let html=""
+
+    data.forEach(t=>{
+
+        html += `
+
+        <tr>
+
+        <td>${t.pnr}</td>
+
+        <td>${t.train}</td>
+
+        <td>₹${t.fare || 0}</td>
+
+        <td>${t.status}</td>
+
+        <td>
+
+        <button class="cancelBtn"
+        onclick="cancelTicket('${t.pnr}')">
+
+        Cancel
+
+        </button>
+
+        </td>
+
+        </tr>
+        `
+    })
+
+    el("ticketData").innerHTML=html
+}
+
+/* CANCEL */
+
+async function cancelTicket(pnr){
+
+    await fetch("/cancel/"+pnr,{
+        method:"POST"
+    })
+
+    alert("Ticket Cancelled")
+
+    loadTickets()
+}
+
+/* PNR */
+
+async function checkPNR(){
+
+    let pnr=el("pnrInput").value
+
+    let res=await fetch("/pnr/"+pnr)
+
+    let data=await res.json()
+
+    if(data.message){
+
+        el("pnrResult").innerHTML=data.message
+
+    }else{
+
+        el("pnrResult").innerHTML=`
+
+        Train: ${data.train}<br>
+
+        From: ${data.source}<br>
+
+        To: ${data.destination}<br>
+
+        Class: ${data.classType}<br>
+
+        People: ${data.people || 1}<br>
+
+        Fare: ₹${data.fare || 0}<br>
+
+        Status: ${data.status}
+
+        `
+    }
+}
+
+/* COMPLAINT */
+
+async function submitComplaint(){
+
+    let res=await fetch("/support",{
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+
+            username:currentUser,
+
+            message:
+            el("issue").value+
+            " - "+
+            el("description").value
+
+        })
+
+    })
+
+    let data=await res.json()
+
+    el("complaintMsg").innerHTML=data.message
+}
+
+/* HELP */
+
+function submitHelp(){
+
+    el("helpMsg").innerHTML=
+    "Query Submitted Successfully"
+}
+
+/* TIME */
+
+setInterval(()=>{
+
+    el("time").innerHTML=
+    "Current Time: "+
+    new Date().toLocaleString()
+
+},1000)
+
+/* LANGUAGE */
+
+function changeLanguage(lang){
+
+    if(lang==="es"){
+
+        el("mainTitle").innerHTML=
+        "🚆 Sistema Ferroviario"
+
+        el("loginTitle").innerHTML=
+        "Iniciar Sesión"
+
+        el("loginBtn").innerHTML=
+        "Entrar"
+    }
+
+    else{
+
+        location.reload()
+    }
+}
+
+/* LOGOUT */
+
+function logout(){
+
+    currentUser=""
+
+    showLogin()
+}
+
+</script>
+
+</body>
+</html>
